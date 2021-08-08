@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     const data=err.data||[];
     res.status(status).json({ message: message, data: data });
   });
+  const PORT = process.env.PORT || 7070;
 sequelize.sync().then(res=>{
-
-    app.listen(7070);
+    app.listen(PORT);
 })
