@@ -48,13 +48,13 @@ exports.postLogin = (req, res, next) => {
   let loadedUser;
   User.findAll({ where: { email: email } })
     .then((user) => {
-      loadedUser = user[0].dataValues;
-      console.log(loadedUser);
       if (user.length === 0) {
         const err = new Error("Email or password doesn't match");
         err.statusCode = 401;
         throw err;
       }
+      loadedUser = user[0].dataValues;
+      console.log(loadedUser);
       return bcrypt.compare(password, loadedUser.password);
     })
     .then((isPass) => {
