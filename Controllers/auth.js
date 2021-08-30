@@ -33,9 +33,18 @@ exports.postSignup = (req, res, next) => {
     })
     .then((user) => {
       const { password, ...updatedUserObj } = user.dataValues;
+      const token = jwt.sign(
+        {
+          email: email,
+          username: username,
+          userId: updatedUserObj.id,
+        },
+        "mysupersecretpassphrasedontshare",
+        { expiresIn: "300h" }
+      ); //will expire in 2 days
       res
         .status(201)
-        .json({ message: "User created!", userData: updatedUserObj });
+        .json({ message: "User created!", userData: updatedUserObj, token: token });
     })
     .catch((err) => {
       next(err);
@@ -70,7 +79,7 @@ exports.postLogin = (req, res, next) => {
           userId: loadedUser.id,
         },
         "mysupersecretpassphrasedontshare",
-        { expiresIn: "48h" }
+        { expiresIn: "300h" }
       ); //will expire in 2 days
       const { password, ...updatedUserObj } = loadedUser;
       res
